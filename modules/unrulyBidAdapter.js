@@ -85,6 +85,10 @@ const getRequests = (conf, validBidRequests, bidderRequest) => {
 const buildPrebidResponseAndInstallRenderer = bids =>
   bids
     .filter(serverBid => {
+      if (!serverBid.ext) {
+        return true;
+      }
+
       const hasConfig = !!utils.deepAccess(serverBid, 'ext.renderer.config');
       const hasSiteId = !!utils.deepAccess(serverBid, 'ext.renderer.config.siteId');
 
@@ -94,6 +98,11 @@ const buildPrebidResponseAndInstallRenderer = bids =>
       return hasSiteId
     })
     .map(serverBid => {
+      if (!serverBid.ext) {
+        var mysteryEmptyObject = {};
+        return { mysteryEmptyObject, serverBid};
+      }
+
       const exchangeRenderer = utils.deepAccess(serverBid, 'ext.renderer');
 
       configureUniversalTag(exchangeRenderer);
@@ -104,6 +113,10 @@ const buildPrebidResponseAndInstallRenderer = bids =>
     })
     .map(
       ({rendererInstance, serverBid}) => {
+        if (!serverBid.ext) {
+          return serverBid;
+        }
+
         const prebidBid = serverResponseToBid(serverBid, rendererInstance);
 
         const rendererConfig = Object.assign(
@@ -171,7 +184,7 @@ export const adapter = {
   },
 
   buildRequests: function (validBidRequests, bidderRequest) {
-    const url = 'https://targeting.unrulymedia.com/prebid';
+    const url = 'https://targeting.unrulymedia.com/unruly_prebid';
     const method = 'POST';
     const options = {contentType: 'text/plain'};
     const request = getRequests({url, method, options}, validBidRequests, bidderRequest);
