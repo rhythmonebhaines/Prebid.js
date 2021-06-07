@@ -23,13 +23,13 @@ function notifyRenderer(bidResponseBid) {
 }
 
 const serverResponseToBid = (bid, rendererInstance) => ({
-  requestId: bid.bidId,
+  requestId: bid.requestId,
   cpm: bid.cpm,
   width: bid.width,
   height: bid.height,
   vastUrl: bid.vastUrl,
   netRevenue: true,
-  creativeId: bid.bidId,
+  creativeId: bid.creativeId,
   ttl: 360,
   meta: {advertiserDomains: bid && bid.adomain ? bid.adomain : []},
   currency: 'USD',
